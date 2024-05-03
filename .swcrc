@@ -1,0 +1,32 @@
+{
+    "jsc": {
+        "parser": {
+            "syntax": "typescript",
+            "decorators": true
+        },
+        "transform": {
+            "decoratorMetadata": true,
+            "legacyDecorator": true
+        },
+        "target": "es2021",
+        "loose": true,
+        "baseUrl": ".",
+        "paths": {
+            "~/*": ["./src/*"],
+            "@/*": ["./*"]
+        }
+    },
+    "env": {
+        "targets": {
+            "node": "16"
+        }
+    },
+    "module": {
+        "type": "commonjs",
+        "strict": false,
+        "strictMode": true,
+        "lazy": false,
+        "noInterop": false
+    },
+    "sourceMaps": "inline"
+}
