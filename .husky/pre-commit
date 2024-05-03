@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo 'Running Git Hooks'
+
+echo "🔎 Checking validity of types with TypeScript"
+
+npx tsc || (
+    "\n⛔️ There is a type error in the code, fix it, and try commit again. ⛔️";
+    false;
+    )
+
+
+echo "\n✅ No TypeError found"
+echo "\n🔎 Running linter.."
+
+npm run lint || (
+    echo '\n⛔️ There is a problem in the code. ⌛️ I run linter autofix for you.';
+
+    echo '\n🧐 Please check the changes and commit again.\n'
+    false;
+    )
+
+echo '✅ No Eslint error found'
+echo '⌛️ Running lint staged and git commit ⌛️'
+npx lint-staged
