@@ -9,7 +9,7 @@ export class AppController {
         readonly manager: EntityManager,
     ) {}
 
-    @Get('hc')
+    @Get('check')
     async getHC() {
         // ヘルスチェック中のログは表示しない
         const baseOption = this.manager.connection.options.logging
