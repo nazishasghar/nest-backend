@@ -1,0 +1,13 @@
+name: Learning Github Action
+on:
+    push:
+        branches:
+            - main
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: lint code
+              run: npm run lint
+            - name: test code
+              run: npm run test

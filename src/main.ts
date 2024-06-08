@@ -3,7 +3,7 @@ import { AppModule } from './app.module'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import helmet from '@fastify/helmet'
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common'
+import { ClassSerializerInterceptor, Logger, ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { camelCase } from 'typeorm/util/StringUtils'
 
@@ -27,6 +27,8 @@ async function bootstrap() {
 
     const config = app.get(ConfigService)
     const isEnabledHTTPS = config.get<boolean>('HTTPS')!
+    const PORT = config.get<string>('PORT')!
+    const HOST = config.get<string>('HOST')!
 
     // バリデーションの設定
     app.useGlobalPipes(
@@ -62,6 +64,8 @@ async function bootstrap() {
         reply.header('x-xss-protection', '1; mode=block')
     })
 
-    await app.listen(3000)
+    await app.listen(PORT, HOST, () => {
+        Logger.log(`listen: http://${HOST}:${PORT}`, 'main')
+    })
 }
 bootstrap()

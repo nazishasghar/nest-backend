@@ -13,7 +13,7 @@ import { CustomNamingStrategy } from './custom-naming-strategy'
         TypeOrmModule.forRootAsync({
             inject: [ConfigService],
             useFactory: (configService: ConfigService) => {
-                const dbUrl = configService.get<string>('DB_URL')!.replace('\\$', '$')
+                const dbUrl = configService.get<string>('DB_URL')!
                 return {
                     type: 'mysql',
                     url: dbUrl,

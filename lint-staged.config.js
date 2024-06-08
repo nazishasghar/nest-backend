@@ -1,20 +1,28 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { ESLint } = require('eslint')
 
+const cli = new ESLint({})
+
+const filterAsync = async (array, callback) => {
+    const results = await Promise.all(array.map((value, index) => callback(value, index)))
+    return array.filter((_, i) => results[i])
+}
+
 const removeIgnoredFiles = async (files) => {
-    const eslint = new ESLint()
-    const isIgnored = await Promise.all(
-        files.map((file) => {
-            return eslint.isPathIgnored(file)
-        }),
-    )
-    const filteredFiles = files.filter((_, i) => !isIgnored[i])
+    const filteredFiles = await filterAsync(files, async (file) => {
+        const isIgnored = await cli.isPathIgnored(file)
+        return !isIgnored
+    })
     return filteredFiles.join(' ')
 }
 
 module.exports = {
-    '**/*.{js,jsx,ts,tsx,md,html,css,yml}': async (files) => {
-        const filesToLint = await removeIgnoredFiles(files)
-        return [`eslint --max-warnings=0 ${filesToLint}`, 'tsc --noEmit']
-    },
+    '*.{js,json,vue,ts,jsx,tsx}': async (files) => [
+        'eslint --ext .ts,.js,.vue,.jsx,.tsx,.mjs,.mts --ignore-path .eslintignore --max-warnings 0 --fix ' +
+            (await removeIgnoredFiles(files)),
+        'prettier --config .prettierrc --ignore-path .eslintignore --write ' + files.join(' '),
+        'npx tsc',
+    ],
+    '*.{html,htm}': 'prettier --config .prettierrc --ignore-path .eslintignore --write ',
+    '*.{css,styl,scss,vue}': 'stylelint --fix',
 }

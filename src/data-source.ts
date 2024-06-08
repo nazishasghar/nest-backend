@@ -6,7 +6,7 @@ import * as path from 'path'
 import { CustomNamingStrategy } from './custom-naming-strategy'
 dotenv.config({ path: `./config/.env` })
 
-const DB_URL = process.env['DB_URL']!.replace('\\\\$', '$')
+const DB_URL = process.env['DB_URL']!
 export const AppDataSource = new DataSource({
     type: 'mysql',
     url: DB_URL,

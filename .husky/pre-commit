@@ -5,7 +5,7 @@ echo 'Running Git Hooks'
 
 echo "🔎 Checking validity of types with TypeScript"
 
-npx tsc || (
+npx tsc --noEmit || (
     "\n⛔️ There is a type error in the code, fix it, and try commit again. ⛔️";
     false;
     )

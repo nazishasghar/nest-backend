@@ -1,0 +1,26 @@
+services:
+    nest-api:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - '3000:3000'
+        volumes:
+            - ./src:/usr/src/app/src
+        env_file:
+            - ./config/.env
+        environment:
+            - PORT=${PORT}
+            - DB_URL=${DB_URL}
+            - HOST=${HOST}
+    db:
+        image: mysql
+        ports:
+            - '33060:3306'
+        env_file:
+            - ./config/.env
+        environment:
+            MYSQL_USER: ns_user
+            MYSQL_DATABASE: test
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
